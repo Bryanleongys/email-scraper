@@ -144,10 +144,15 @@ def scrape(email_address, password, frequency, last_query, keywords):
         result.append("="*25)
         return result
 
-print(scrape("whatever93201@mail.com", "A!@345678!", 6, datetime.now() - timedelta(hours=6), []))
+# print(authenticate("noreplytest2468@gmail.com", "A12345678!"))
+
+print(scrape("whatever12093@gmail.com", "A12345678!", 6, datetime.now() - timedelta(hours=6), ["sand"]))
 
 # whatever1239042@outlook.com
 # A!@345678
 
 # whatever93201@mail.com
 # A!@345678!
+
+#noreplytest2468@gmail.com
+#A12345678!

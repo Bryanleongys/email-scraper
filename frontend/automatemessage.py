@@ -3,6 +3,8 @@ import initialization
 from telegram.ext import *
 from telegram import InlineKeyboardMarkup, InlineKeyboardButton, ParseMode, ReplyKeyboardMarkup, KeyboardButton, Message, Bot, ReplyKeyboardRemove
 import globals
+import time, datetime, pytz
+import notifications
 
 def prompt_automate(update, context):
    
@@ -26,8 +28,11 @@ def select_automate(update, context):
     globals.automate = not globals.automate
 
     if (globals.automate):
+        notifications.on_notif(update, context)
         text = "Automated messages are currently turned on."
+        print("hello")
     else:
+        notifications.off_notif(update, context)
         text = "Automated messages are currently turned off."
 
     text2 = "Welcome to EmailScraper. Please initialize your settings in Keywords and Message Settings tabs."

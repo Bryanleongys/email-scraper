@@ -59,7 +59,7 @@ def get_password(update, context):
 
     text = "Your password " + user_input + " has been stored."
 
-    text2 = "Welcome to EmailScraper. Please initialize your settings in Keywords and Frequency tabs."
+    text2 = "Welcome to EmailScraper. Please initialize your settings in Keywords and Message Settings tabs."
 
     update.message.reply_text(text)
     update.message.reply_text(text=text2, reply_markup=keyboards.main_options_keyboard())

@@ -6,6 +6,7 @@ import initialization
 import keywords
 import frequency
 import keyboards
+import checkmessages
 
 def error(update, context):
     print("error")
@@ -52,6 +53,8 @@ def main():
         per_user=False
     ))
     # dp.add_handler(CallbackQueryHandler(keywords.prompt_frequency, pattern='frequency'))
+
+    dp.add_handler(CallbackQueryHandler(checkmessages.send_message, pattern="check_messages"))
 
     updater.start_polling()
     updater.idle()

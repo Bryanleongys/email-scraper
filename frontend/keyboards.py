@@ -7,6 +7,7 @@ def main_options_keyboard():
         [InlineKeyboardButton(
             "Keywords", callback_data='keywords')],
         [InlineKeyboardButton("Message Settings", callback_data='message_settings')],
+        [InlineKeyboardButton("Check Messages", callback_data='check_messages')],
     ]
     return InlineKeyboardMarkup(keyboard)
 

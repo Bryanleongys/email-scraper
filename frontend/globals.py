@@ -1,8 +1,8 @@
 
 global frequency
-frequency = 0
+frequency = 24
 global keywords
-keywords = ["nusmodreg", "python", "helloworld"]
+keywords = []
 
 global email_address
 email_address = ""

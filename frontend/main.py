@@ -1,6 +1,8 @@
 from telegram.ext import *
 from telegram import InlineKeyboardMarkup, InlineKeyboardButton, ParseMode, ReplyKeyboardMarkup, KeyboardButton, Message, Bot, ReplyKeyboardRemove
 from functools import partial
+
+from telegram.ext import callbackqueryhandler
 import Constants as keys
 import initialization
 import keywords
@@ -45,6 +47,7 @@ def main():
     dp.add_handler(ConversationHandler(
         entry_points=[CallbackQueryHandler(partial(
             keywords.prompt_keywords), pattern="keywords")],
+            
         states={
             1: [MessageHandler(Filters.text, keywords.add_keyword)],
         },
@@ -52,7 +55,37 @@ def main():
             show_home, pattern="main_options"), CallbackQueryHandler(keywords.delete_keyword, pattern="word")],
         per_user=False
     ))
-    # dp.add_handler(CallbackQueryHandler(keywords.prompt_frequency, pattern='frequency'))
+
+    #Change this to message settings
+    dp.add_handler(ConversationHandler(
+        entry_points = [CallbackQueryHandler(frequency.prompt_message_setting, pattern='message_settings')],
+
+        states={
+            1: [CallbackQueryHandler(frequency.prompt_frequency, pattern="frequency")],
+            2: [CallbackQueryHandler(frequency.check_email, pattern="check_email")],
+           
+        },
+
+        fallbacks=[CallbackQueryHandler(
+            show_home, pattern="main_options")],
+        per_user=False
+        
+    
+    ))
+    
+    dp.add_handler(ConversationHandler(
+        entry_points = [CallbackQueryHandler(frequency.prompt_frequency, pattern='frequency')],
+
+        states={
+            1: [CallbackQueryHandler(frequency.select_frequency, pattern="interval")],
+        },
+
+        fallbacks=[CallbackQueryHandler(
+            show_home, pattern="main_options")],
+        per_user=False
+        
+    
+    ))
 
     dp.add_handler(CallbackQueryHandler(checkmessages.send_message, pattern="check_messages"))
 

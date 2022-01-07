@@ -54,12 +54,29 @@ def main():
             show_home, pattern="main_options"), CallbackQueryHandler(keywords.delete_keyword, pattern="word")],
         per_user=False
     ))
+
+    #Change this to message settings
+    dp.add_handler(ConversationHandler(
+        entry_points = [CallbackQueryHandler(frequency.prompt_message_setting, pattern='message_settings')],
+
+        states={
+            1: [CallbackQueryHandler(frequency.prompt_frequency, pattern="frequency")],
+            2: [CallbackQueryHandler(frequency.check_email, pattern="check_email")],
+           
+        },
+
+        fallbacks=[CallbackQueryHandler(
+            show_home, pattern="main_options")],
+        per_user=False
+        
+    
+    ))
     
     dp.add_handler(ConversationHandler(
         entry_points = [CallbackQueryHandler(frequency.prompt_frequency, pattern='frequency')],
 
         states={
-            1: [CallbackQueryHandler(frequency.select_frequency, pattern = "interval")],
+            1: [CallbackQueryHandler(frequency.select_frequency, pattern="interval")],
         },
 
         fallbacks=[CallbackQueryHandler(

@@ -6,7 +6,7 @@ import globals
 
 def send_message(update, context):
     query = update.callback_query
-    chat_id = query.message.chat_idi
+    chat_id = query.message.chat_id
 
     ## Scraper function here
     text_messages = ["Date: 2022-01-07 13:39 SGT\nSubject: this is a test email\nFrom: sandboxreply@gmail.com\nHi Im back.\r\n    \r\n    Best regards,\r\n    Im back\r\n\n", "hello1", "hello2"]

@@ -8,3 +8,7 @@ global email_address
 email_address = ""
 global password
 password = ""
+
+global automate
+automate = False
+

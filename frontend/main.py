@@ -9,6 +9,7 @@ import keywords
 import frequency
 import keyboards
 import checkmessages
+import automatemessage
 
 def error(update, context):
     print("error")
@@ -57,21 +58,22 @@ def main():
     ))
 
     #Change this to message settings
-    dp.add_handler(ConversationHandler(
-        entry_points = [CallbackQueryHandler(frequency.prompt_message_setting, pattern='message_settings')],
+    # dp.add_handler(ConversationHandler(
+    #     entry_points = [CallbackQueryHandler(frequency.prompt_message_setting, pattern='message_settings')],
 
-        states={
-            1: [CallbackQueryHandler(frequency.prompt_frequency, pattern="frequency")],
-            2: [CallbackQueryHandler(frequency.check_email, pattern="check_email")],
+    #     states={
+    #         1: [CallbackQueryHandler(frequency.prompt_frequency, pattern="frequency")],
+    #         2: [CallbackQueryHandler(frequency.check_email, pattern="automate_messaging")],
            
-        },
+    #     },
 
-        fallbacks=[CallbackQueryHandler(
-            show_home, pattern="main_options")],
-        per_user=False
+    #     fallbacks=[CallbackQueryHandler(
+    #         show_home, pattern="main_options")],
+    #     per_user=False
         
     
-    ))
+    # ))
+    dp.add_handler(CallbackQueryHandler(frequency.prompt_message_setting, pattern='message_setting'))
     
     dp.add_handler(ConversationHandler(
         entry_points = [CallbackQueryHandler(frequency.prompt_frequency, pattern='frequency')],
@@ -81,11 +83,23 @@ def main():
         },
 
         fallbacks=[CallbackQueryHandler(
-            show_home, pattern="main_options")],
+            frequency.prompt_message_setting, pattern="message_settings")],
         per_user=False
         
     
     ))
+
+    dp.add_handler(
+        ConversationHandler(
+            entry_points=[CallbackQueryHandler(automatemessage.prompt_automate, pattern='automate_messaging')],
+            states={
+                1: [CallbackQueryHandler(automatemessage.select_automate, pattern="on_off")],
+            },
+            fallbacks=[CallbackQueryHandler(
+            show_home, pattern="main_options")],
+            per_user=False
+        )
+    )
 
     dp.add_handler(CallbackQueryHandler(checkmessages.send_message, pattern="check_messages"))
 

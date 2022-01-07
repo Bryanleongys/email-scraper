@@ -37,14 +37,14 @@ def select_frequency(update, context):
         text=text,
         reply_markup=keyboards.main_options_keyboard()
     )
-    return 1
+    return ConversationHandler.END
 
 
 def prompt_message_setting(update, context):
     query = update.callback_query
     chat_id = query.message.chat_id
     message_id = query.message.message_id
-    text = "Adjust the reminder interval here, or check your emails now."
+    text = "Adjust the reminder interval here, or on/off automated messaging."
     context.bot.edit_message_text(
         chat_id=chat_id,
         message_id=message_id,
@@ -52,7 +52,7 @@ def prompt_message_setting(update, context):
         reply_markup=keyboards.message_settings_keyboard()
     )
 
-    return 1
+    return ConversationHandler.END
 
 def check_email(update, context):
     query = update.callback_query
@@ -68,4 +68,4 @@ def check_email(update, context):
 
     update.message.reply_text(text)
 
-    return 1
+    return ConversationHandler.END

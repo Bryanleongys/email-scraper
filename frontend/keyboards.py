@@ -27,12 +27,22 @@ def frequency_keyboard():
     keyboard = []
     keyboard.append([InlineKeyboardButton("12h", callback_data="interval12")])
     keyboard.append([InlineKeyboardButton("24h", callback_data="interval24")])
-    keyboard.append([InlineKeyboardButton("Back", callback_data="main_options")])
+    keyboard.append([InlineKeyboardButton("Back", callback_data="message_settings")])
     return InlineKeyboardMarkup(keyboard)
 
 def message_settings_keyboard():
     keyboard = []
     keyboard.append([InlineKeyboardButton("Frequency", callback_data="frequency")])
-    keyboard.append([InlineKeyboardButton("Check Email Now", callback_data="check_email")])
+    keyboard.append([InlineKeyboardButton("On/Off Automated Messaging", callback_data="automate_messaging")])
+    keyboard.append([InlineKeyboardButton("Back", callback_data="main_options")])
+    return InlineKeyboardMarkup(keyboard)
+
+def automate_keyboard():
+    keyboard = []
+    if (globals.automate):
+        keyboard.append([InlineKeyboardButton("Off", callback_data="on_off")])
+    else:
+        keyboard.append([InlineKeyboardButton("On", callback_data="on_off")])
+
     keyboard.append([InlineKeyboardButton("Back", callback_data="main_options")])
     return InlineKeyboardMarkup(keyboard)

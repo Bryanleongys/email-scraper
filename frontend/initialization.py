@@ -1,7 +1,14 @@
 from telegram.ext import *
 from telegram import InlineKeyboardMarkup, InlineKeyboardButton, ParseMode, ReplyKeyboardMarkup, KeyboardButton, Message, Bot, ReplyKeyboardRemove
 import keyboards
+import re
 
+def isValid(email):
+    regex = re.compile(r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+')
+    if re.fullmatch(regex, email):
+      return True
+    else:
+      return False
 
 def start(update, context):
     chat_id = update.message.chat.id
@@ -19,13 +26,23 @@ def get_email(update, context):
     chat_id = update.message.chat.id
     user_input = update.message.text
 
-    text = "Your email " + user_input + " has been registered."
-    text2 = "Please enter the password to the email given."
+    if not isValid(user_input) :
+        text = "Your email " + user_input + " is invalid."
+        text2 = "Please enter your email again."
 
-    update.message.reply_text(text)
-    update.message.reply_text(text2)
+        update.message.reply_text(text)
+        update.message.reply_text(text2)
 
-    return 2
+        return 1
+    else:
+        text = "Your email " + user_input + " has been registered."
+        text2 = "Please enter the password to the email given."
+    
+        update.message.reply_text(text)
+        update.message.reply_text(text2)
+
+        return 2
+
 
 def get_password(update, context):
     chat_id = update.message.chat.id

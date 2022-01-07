@@ -3,13 +3,16 @@ import initialization
 from telegram.ext import *
 from telegram import InlineKeyboardMarkup, InlineKeyboardButton, ParseMode, ReplyKeyboardMarkup, KeyboardButton, Message, Bot, ReplyKeyboardRemove
 import globals
+import backend
+from datetime import datetime, timedelta
 
 def send_message(update, context):
     query = update.callback_query
     chat_id = query.message.chat_id
-
+    
     ## Scraper function here
-    text_messages = ["Date: 2022-01-07 13:39 SGT\nSubject: this is a test email\nFrom: sandboxreply@gmail.com\nHi Im back.\r\n    \r\n    Best regards,\r\n    Im back\r\n\n", "hello1", "hello2"]
+    text_messages = backend.scrape(globals.email_address, globals.password, globals.frequency, globals.last_query, globals.keywords)
+    globals.last_query = datetime.now()
 
     for text in text_messages:
         context.bot.send_message(

@@ -1,7 +1,9 @@
-import time, datetime, pytz
+import pytz
+from datetime import datetime, timedelta
 import Constants as keys
 import requests
 import globals
+import backend
 
 def remove_job(name, context):
     current_jobs = context.job_queue.get_jobs_by_name(name)
@@ -23,12 +25,11 @@ def on_notif(update, context):
 
     remove_job(str(chat_id), context) #remove any existing jobs
     time_zone = pytz.timezone("Asia/Singapore")
-    reset_time = datetime.time(hour=17, minute=21, second=0, tzinfo=time_zone)
     context.job_queue.run_repeating(send_notification, interval, context=update)
 
 def send_notification(context):
-    print('hello world')
     ## Scrape data here
-    email_array = ["hello world", "hello one"]
+    email_array = backend.scrape(globals.email_address, globals.password, globals.frequency, globals.last_query, globals.keywords)
+    globals.last_query = datetime.now()
     for email in email_array:
         context.job.context.effective_user.send_message(text=email)

@@ -2,6 +2,8 @@ from telegram.ext import *
 from telegram import InlineKeyboardMarkup, InlineKeyboardButton, ParseMode, ReplyKeyboardMarkup, KeyboardButton, Message, Bot, ReplyKeyboardRemove
 import keyboards
 import re
+import backend
+import globals
 
 def isValid(email):
     regex = re.compile(r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+')
@@ -50,12 +52,18 @@ def get_password(update, context):
     user_input = update.message.text
     ## Authentication if password is invalid - input conditional statement
     ## Backend functions to login to email
-    
-    if (False):
+    email_address = context.user_data["email_address"]
+    print(email_address)
+    print(user_input)
+
+    if not (backend.authenticate(email_address, user_input)):
         update.message.reply_text(
             text="Invalid password. Please re-type your email and password."
         )
         return 1
+
+    globals.email_address = email_address
+    globals.password = user_input
 
     text = "Your password " + user_input + " has been stored."
 

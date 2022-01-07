@@ -30,7 +30,6 @@ def select_automate(update, context):
     if (globals.automate):
         notifications.on_notif(update, context)
         text = "Automated messages are currently turned on."
-        print("hello")
     else:
         notifications.off_notif(update, context)
         text = "Automated messages are currently turned off."

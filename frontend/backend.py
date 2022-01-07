@@ -47,9 +47,9 @@ def authenticate(email_address, password):
         imap = imaplib.IMAP4_SSL(email_dict[email_sort(email_address)])
         imap.login(email_address, password)
     except:
-        return 'authentication failed'
+        return False
     else:
-        return 'authentication success'
+        return True
 
 # Scrape user_inbox for relevant emails that match keywords
 def scrape(email_address, password, frequency, last_query, keywords):

@@ -23,7 +23,6 @@ def on_notif(update, context):
 
     remove_job(str(chat_id), context) #remove any existing jobs
     time_zone = pytz.timezone("Asia/Singapore")
-    reset_time = datetime.time(hour=17, minute=21, second=0, tzinfo=time_zone)
     context.job_queue.run_repeating(send_notification, interval, context=update)
 
 def send_notification(context):

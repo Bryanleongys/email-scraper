@@ -18,6 +18,7 @@ def start(update, context):
 def get_email(update, context):
     chat_id = update.message.chat.id
     user_input = update.message.text
+    context.user_data["email_address"] = user_input
 
     text = "Your email " + user_input + " has been registered."
     text2 = "Please enter the password to the email given."
@@ -31,6 +32,8 @@ def get_password(update, context):
     chat_id = update.message.chat.id
     user_input = update.message.text
     ## Authentication if password is invalid - input conditional statement
+    ## Backend functions to login to email
+    
     if (False):
         update.message.reply_text(
             text="Invalid password. Please re-type your email and password."
@@ -42,6 +45,6 @@ def get_password(update, context):
     text2 = "Welcome to EmailScraper. Please initialize your settings in Keywords and Frequency tabs."
 
     update.message.reply_text(text)
-    update.message.reply_text(text2)
+    update.message.reply_text(text=text2, reply_markup=keyboards.main_options_keyboard())
 
     return ConversationHandler.END

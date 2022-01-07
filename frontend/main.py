@@ -4,12 +4,7 @@ from functools import partial
 
 from telegram.ext import callbackqueryhandler
 import Constants as keys
-import initialization
-import keywords
-import frequency
-import keyboards
-import checkmessages
-import automatemessage
+import initialization, keywords, frequency, keyboards, checkmessages, automatemessage, changepassword
 
 def error(update, context):
     print("error")
@@ -57,22 +52,6 @@ def main():
         per_user=False
     ))
 
-    #Change this to message settings
-    # dp.add_handler(ConversationHandler(
-    #     entry_points = [CallbackQueryHandler(frequency.prompt_message_setting, pattern='message_settings')],
-
-    #     states={
-    #         1: [CallbackQueryHandler(frequency.prompt_frequency, pattern="frequency")],
-    #         2: [CallbackQueryHandler(frequency.check_email, pattern="automate_messaging")],
-           
-    #     },
-
-    #     fallbacks=[CallbackQueryHandler(
-    #         show_home, pattern="main_options")],
-    #     per_user=False
-        
-    
-    # ))
     dp.add_handler(CallbackQueryHandler(frequency.prompt_message_setting, pattern='message_setting'))
     
     dp.add_handler(ConversationHandler(
@@ -96,12 +75,38 @@ def main():
                 1: [CallbackQueryHandler(automatemessage.select_automate, pattern="on_off")],
             },
             fallbacks=[CallbackQueryHandler(
-            show_home, pattern="main_options")],
+            frequency.prompt_message_setting, pattern="message_settings")],
             per_user=False
         )
     )
 
     dp.add_handler(CallbackQueryHandler(checkmessages.send_message, pattern="check_messages"))
+    dp.add_handler(CallbackQueryHandler(show_home, pattern="main_options"))
+
+    dp.add_handler(
+        ConversationHandler(
+            entry_points=[CallbackQueryHandler(changepassword.select_email, pattern='change_password')],
+            states={
+                1: [CallbackQueryHandler(changepassword.prompt_password, pattern="email")],
+                2: [MessageHandler(Filters.text, changepassword.confirm_password)],
+            },
+            fallbacks=[CallbackQueryHandler(
+            frequency.prompt_message_setting, pattern="message_settings")],
+            per_user=False
+        )
+    )
+    
+    dp.add_handler(
+        ConversationHandler(
+            entry_points=[CallbackQueryHandler(initialization.add_email, pattern="add_email")],
+            states={
+                1: [MessageHandler(Filters.text, initialization.get_email)],
+                2: [MessageHandler(Filters.text, initialization.get_password)],
+            },
+            fallbacks=[CallbackQueryHandler(initialization.delete_email, pattern="email")],
+            per_user=False
+        )
+    )
 
     updater.start_polling()
     updater.idle()

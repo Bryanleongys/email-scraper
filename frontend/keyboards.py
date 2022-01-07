@@ -8,11 +8,16 @@ def main_options_keyboard():
             "Keywords", callback_data='keywords')],
         [InlineKeyboardButton("Message Settings", callback_data='message_settings')],
         [InlineKeyboardButton("Check Messages", callback_data='check_messages')],
+        [InlineKeyboardButton("Change Password", callback_data="change_password")],
+        [InlineKeyboardButton("Emails", callback_data="add_email")],
     ]
     return InlineKeyboardMarkup(keyboard)
 
-def keyword_keyboard():
-    keywords = globals.keywords 
+def keyword_keyboard(chat_id):
+    if chat_id in globals.keywords:
+        keywords = globals.keywords[chat_id] 
+    else:
+        keywords = []
     keyboard = []
     counter = 0
     for keyword in keywords:
@@ -44,5 +49,17 @@ def automate_keyboard():
     else:
         keyboard.append([InlineKeyboardButton("On", callback_data="on_off")])
 
+    keyboard.append([InlineKeyboardButton("Back", callback_data="message_settings")])
+    return InlineKeyboardMarkup(keyboard)
+
+def email_keyboard():
+    keyboard = []
+    email_addresses = globals.email_address
+    counter = 0
+    for email_address in email_addresses:
+        keyboard.append([InlineKeyboardButton(email_address, callback_data=("email"+str(counter)))])
+        counter += 1
+    
     keyboard.append([InlineKeyboardButton("Back", callback_data="main_options")])
+
     return InlineKeyboardMarkup(keyboard)

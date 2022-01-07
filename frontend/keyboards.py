@@ -21,3 +21,14 @@ def keyword_keyboard():
     keyboard.append([InlineKeyboardButton("Back", callback_data="main_options")])
     return InlineKeyboardMarkup(keyboard)
 
+def frequency_keyboard():
+    intervals = [12,24]#in hours
+    keyboard = []
+    # # counter = 0
+    # for interval in intervals:
+    #     keyboard.append([InlineKeyboardButton(interval, callback_data=(interval))])
+    #     # counter += 1
+    keyboard.append([InlineKeyboardButton("12", callback_data="interval12")])
+    keyboard.append([InlineKeyboardButton("24", callback_data="interval24")])
+    keyboard.append([InlineKeyboardButton("Back", callback_data="main_options")])
+    return InlineKeyboardMarkup(keyboard)

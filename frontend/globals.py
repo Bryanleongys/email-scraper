@@ -1,15 +1,14 @@
-
 import time, datetime, pytz
 
 global frequency
 frequency = 24
 global keywords
-keywords = []
+keywords = {}
 
 global email_address
-email_address = ""
+email_address = []
 global password
-password = ""
+password = []
 
 global automate
 automate = False

@@ -28,8 +28,11 @@ def on_notif(update, context):
     context.job_queue.run_repeating(send_notification, interval, context=update)
 
 def send_notification(context):
-    ## Scrape data here
-    email_array = backend.scrape(globals.email_address, globals.password, globals.frequency, globals.last_query, globals.keywords)
+    email_addresses = globals.email_address
+    passwords = globals.passwords
+    for i in len(email_addresses):
+        email_array = backend.scrape(email_addresses[i], passwords[i], globals.frequency, globals.last_query, globals.keywords)
+
     globals.last_query = datetime.now()
     for email in email_array:
         context.job.context.effective_user.send_message(text=email)

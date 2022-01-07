@@ -24,6 +24,56 @@ def start(update, context):
 
     return 1
 
+def add_email(update, context):
+    query = update.callback_query
+    chat_id = query.message.chat_id
+    message_id = query.message.message_id
+
+    text = "Following are your current email addresses, click to remove, and type in to add a new email."
+
+    context.bot.edit_message_text(
+        chat_id=chat_id,
+        message_id=message_id,
+        text=text,
+        reply_markup=keyboards.email_keyboard()
+    )
+
+    return 1
+
+def delete_email(update, context):
+    query = update.callback_query
+    chat_id = query.message.chat_id
+    message_id = query.message.message_id
+    query = update.callback_query
+    index = int(query.data[5:])
+
+    if (len(globals.email_address) == 1):
+        text = "Please keep at least one email stored."
+        context.bot.edit_message_text(
+            chat_id=chat_id,
+            message_id=message_id,
+            text=text,
+        )
+        text2 = "Following are your current email addresses, click to remove, and type in to add a new email."
+        context.bot.send_message(
+            chat_id=chat_id,
+            text=text2,
+            reply_markup=keyboards.email_keyboard()
+        )
+    
+    else:
+        del globals.email_address[index]
+
+        text = "Following are your current email addresses, click to remove, and type in to add a new email."
+        context.bot.edit_message_text(
+            chat_id=chat_id,
+            message_id=message_id,
+            text=text,
+            reply_markup=keyboards.email_keyboard()
+        )
+
+    return 1
+
 def get_email(update, context):
     chat_id = update.message.chat.id
     user_input = update.message.text
@@ -62,8 +112,11 @@ def get_password(update, context):
         )
         return 1
 
-    globals.email_address = email_address
-    globals.password = user_input
+    globals.email_address.append(email_address)
+    globals.password.append(user_input)
+
+    print(globals.email_address)
+    print(globals.password)
 
     text = "Your password " + user_input + " has been stored."
 

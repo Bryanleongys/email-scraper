@@ -6,7 +6,7 @@ import os
 from datetime import datetime, timedelta
 
 previous_query_time = datetime.now() - timedelta(hours = 1)
-print(previous_query_time)
+# print(previous_query_time)
 
 # Create Datetime from Email_date
 def create_email_datetime(email_date):
@@ -58,7 +58,7 @@ def scrape(email_address, password, frequency, last_query, keywords):
         previous_query_time = last_query
     else:
         previous_query_time = (datetime.now() - timedelta(hours = frequency))
-    print(previous_query_time)
+    # print(previous_query_time)
     try:
         imap = imaplib.IMAP4_SSL(email_dict[email_sort(email_address)])
         imap.login(email_address, password)
@@ -69,7 +69,8 @@ def scrape(email_address, password, frequency, last_query, keywords):
         messages = int(messages[0])
 
         break_flag = False
-        result = []
+        result = ["The following emails are from" + email_address + "'s inbox."]
+        result.append("="*25)
         while(break_flag != True):
             # Fetch the email message matching the message ID
             new_string = ""
@@ -127,7 +128,7 @@ def scrape(email_address, password, frequency, last_query, keywords):
                             # print only text email parts
                             new_string += (body + "\n")
             for i in keywords:
-                if(i.upper() in new_string.upper()):
+                if(str(i).upper() in str(new_string).upper()):
                     keyword_flag = True
                     break
             if((break_flag != True) and (keyword_flag == True)):
@@ -136,9 +137,11 @@ def scrape(email_address, password, frequency, last_query, keywords):
             if (messages == 0):
                 break_flag = True
                 break
+        
         # close the connection and logout
         imap.close()
         imap.logout()
+        result.append("="*25)
         return result
 
 print(scrape("whatever93201@mail.com", "A!@345678!", 6, datetime.now() - timedelta(hours=6), []))

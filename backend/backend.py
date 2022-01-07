@@ -8,6 +8,7 @@ from datetime import datetime, timedelta
 previous_query_time = datetime.now() - timedelta(hours = 1)
 print(previous_query_time)
 
+# Create Datetime from Email_date
 def create_email_datetime(email_date):
     email_array = email_date.split(" ")
     email_year = int(email_array[3])
@@ -20,19 +21,6 @@ def create_email_datetime(email_date):
     email_date_object = datetime(email_year, email_month, email_day, email_hour, email_minute) + timedelta(hours = 16)
     return email_date_object 
 
-# user login
-try:
-    user_email = "noreplytest2468@gmail.com"
-    user_password = "A12345678!"
-except:
-    print('good try')
-else:
-    pass
-#finally:
-
-# create an IMAP4 class with SSL 
-imap = imaplib.IMAP4_SSL("imap.gmail.com")
-
 email_dict = {
     "gmail" : "imap.gmail.com",
     "outlook" : "imap-mail.outlook.com",
@@ -42,37 +30,38 @@ email_dict = {
     "mail_com" : "imap.mail.com"
 }
 
-def email_sort(user_email):
-    if("@gmail" in user_email):
+# Sort email by email provider
+def email_sort(email_address):
+    if("@gmail" in email_address):
         return "gmail"
-    elif("@outlook" in user_email or "@u.nus.edu" in user_email or "@hotmail" in user_email):
+    elif("@outlook" in email_address or "@u.nus.edu" in email_address or "@hotmail" in email_address):
         return "outlook"
-    elif("@yahoo" in user_email):
+    elif("@yahoo" in email_address):
         return "yahoo"
     else:
         return "mail_com"
 
-# authenticate
-def authenticate(user_email, user_password):
+# Authenticate email_address and password
+def authenticate(email_address, password):
     try:
-        imap = imaplib.IMAP4_SSL(email_dict[email_sort(user_email)])
-        imap.login(user_email, user_password)
+        imap = imaplib.IMAP4_SSL(email_dict[email_sort(email_address)])
+        imap.login(email_address, password)
     except:
         return 'authentication failed'
     else:
         return 'authentication success'
 
-#scrape
-def scrape(user_email, user_password, N, last_query, keywords):
+# Scrape user_inbox for relevant emails that match keywords
+def scrape(email_address, password, frequency, last_query, keywords):
     previous_query_time = datetime.now()
-    if (datetime.now() - last_query < timedelta(hours = N)):
+    if (datetime.now() - last_query < timedelta(hours = frequency)):
         previous_query_time = last_query
     else:
-        previous_query_time = (datetime.now() - timedelta(hours = N))
+        previous_query_time = (datetime.now() - timedelta(hours = frequency))
     print(previous_query_time)
     try:
-        imap = imaplib.IMAP4_SSL(email_dict[email_sort(user_email)])
-        imap.login(user_email, user_password)
+        imap = imaplib.IMAP4_SSL(email_dict[email_sort(email_address)])
+        imap.login(email_address, password)
     except:
         return 'authentication failed'
     else:
@@ -82,7 +71,7 @@ def scrape(user_email, user_password, N, last_query, keywords):
         break_flag = False
         result = []
         while(break_flag != True):
-            # fetch the email message by ID
+            # Fetch the email message matching the message ID
             new_string = ""
             if (keywords == []):
                 keyword_flag = True
@@ -91,35 +80,38 @@ def scrape(user_email, user_password, N, last_query, keywords):
             res, msg = imap.fetch(str(messages), "(RFC822)")
             for response in msg:
                 if isinstance(response, tuple):
-                    # parse a bytes email into a message object
+                    # Recover an email message from bytes object
                     msg = email.message_from_bytes(response[1])
-                    # decode the email subject
+                    # Decode the email subject
                     subject, encoding = decode_header(msg["Subject"])[0]
                     if isinstance(subject, bytes):
-                        # if it's a bytes, decode to str
+                        # Further decode to string if subject is a bytes object
                         subject = subject.decode(encoding)
-                    # decode email sender
+                    # Decode the address of email sender
                     From, encoding = decode_header(msg.get("From"))[0]
                     if isinstance(From, bytes):
+                        # Further decode to string if From is a bytes object
                         From = From.decode(encoding)
                     email_date = msg['Date']
                     email_date_object = create_email_datetime(email_date)
                     if (email_date_object < previous_query_time):
+                        # Break from loop as current email was received before previous_query_time
                         break_flag = True
                         break
+                    # Concatenate string with information from email
                     new_string += ("Date: " + email_date_object.strftime("%Y-%m-%d %H:%M") + " SGT\n")
                     new_string += ("Subject: " + subject + "\n")
                     new_string += ("From: " + From + "\n")
 
-                    # if the email message is multipart
+                    # If the email body is a multipart message
                     if msg.is_multipart():
-                        # iterate over email parts
+                        # Iterate over email parts
                         for part in msg.walk():
                             # extract content type of email
                             content_type = part.get_content_type()
                             content_disposition = str(part.get("Content-Disposition"))
                             try:
-                                # get the email body
+                                # Obtain email body message
                                 body = part.get_payload(decode=True).decode()
                             except:
                                 pass

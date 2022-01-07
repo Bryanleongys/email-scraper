@@ -15,7 +15,7 @@ def show_home(update, context):
     chat_id = query.message.chat_id
     message_id = query.message.message_id
 
-    text = "Welcome to EmailScraper. Please initialize your settings in Keywords and Frequency tabs."
+    text = "Welcome to EmailScraper. Please initialize your settings in Keywords and Message Settings tabs."
     context.bot.edit_message_text(
         chat_id=chat_id,
         message_id=message_id,
@@ -48,7 +48,7 @@ def main():
             1: [MessageHandler(Filters.text, keywords.add_keyword)],
         },
         fallbacks=[CallbackQueryHandler(
-            show_home, pattern="main_options")],
+            show_home, pattern="main_options"), CallbackQueryHandler(keywords.delete_keyword, pattern="word")],
         per_user=False
     ))
     # dp.add_handler(CallbackQueryHandler(keywords.prompt_frequency, pattern='frequency'))

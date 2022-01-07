@@ -31,3 +31,22 @@ def add_keyword(update, context):
         text=text2, reply_markup=keyboards.keyword_keyboard())
 
     return 1
+
+def delete_keyword(update, context):
+    query = update.callback_query
+    chat_id = query.message.chat_id
+    message_id = query.message.message_id
+    query = update.callback_query
+    index = int(query.data[4:])
+
+    del globals.keywords[index]
+
+    text = "Following are the keywords you have added. Type to add in a new keyword, click to delete a keyword."
+    context.bot.edit_message_text(
+        chat_id=chat_id,
+        message_id=message_id,
+        text=text,
+        reply_markup=keyboards.keyword_keyboard()
+    )
+
+    return 1

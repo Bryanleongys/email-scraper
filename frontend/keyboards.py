@@ -6,7 +6,7 @@ def main_options_keyboard():
     keyboard = [
         [InlineKeyboardButton(
             "Keywords", callback_data='keywords')],
-        [InlineKeyboardButton("Frequency", callback_data='frequency')],
+        [InlineKeyboardButton("Message Settings", callback_data='message_settings')],
     ]
     return InlineKeyboardMarkup(keyboard)
 

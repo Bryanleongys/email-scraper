@@ -27,7 +27,7 @@ def get_email(update, context):
     user_input = update.message.text
     context.user_data["email_address"] = user_input
 
-    if not isValid(user_input) :
+    if not isValid(user_input):
         text = "Your email " + user_input + " is invalid."
         text2 = "Please enter your email again."
 

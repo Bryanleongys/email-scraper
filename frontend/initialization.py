@@ -1,5 +1,6 @@
 from telegram.ext import *
 from telegram import InlineKeyboardMarkup, InlineKeyboardButton, ParseMode, ReplyKeyboardMarkup, KeyboardButton, Message, Bot, ReplyKeyboardRemove
+import time, datetime, pytz
 import keyboards
 import re
 import backend
@@ -35,7 +36,7 @@ def add_email(update, context):
         chat_id=chat_id,
         message_id=message_id,
         text=text,
-        reply_markup=keyboards.email_keyboard()
+        reply_markup=keyboards.email_keyboard(chat_id)
     )
 
     return 1
@@ -47,7 +48,7 @@ def delete_email(update, context):
     query = update.callback_query
     index = int(query.data[5:])
 
-    if (len(globals.email_address) == 1):
+    if (len(globals.email_address[chat_id]) == 1):
         text = "Please keep at least one email stored."
         context.bot.edit_message_text(
             chat_id=chat_id,
@@ -58,18 +59,18 @@ def delete_email(update, context):
         context.bot.send_message(
             chat_id=chat_id,
             text=text2,
-            reply_markup=keyboards.email_keyboard()
+            reply_markup=keyboards.email_keyboard(chat_id)
         )
     
     else:
-        del globals.email_address[index]
+        del globals.email_address[chat_id][index]
 
         text = "Following are your current email addresses, click to remove, and type in to add a new email."
         context.bot.edit_message_text(
             chat_id=chat_id,
             message_id=message_id,
             text=text,
-            reply_markup=keyboards.email_keyboard()
+            reply_markup=keyboards.email_keyboard(chat_id)
         )
 
     return 1
@@ -112,8 +113,20 @@ def get_password(update, context):
         )
         return 1
 
-    globals.email_address.append(email_address)
-    globals.password.append(user_input)
+    if chat_id in globals.email_address:
+        globals.email_address[chat_id].append(email_address)
+    else:
+        globals.email_address[chat_id] = [email_address,]
+
+    if chat_id in globals.password:
+        globals.password[chat_id].append(user_input)
+    else:
+        globals.password[chat_id] = [user_input,]
+
+    if chat_id not in globals.frequency:
+        globals.frequency[chat_id] = 24
+    if chat_id not in globals.last_query:
+        globals.last_query[chat_id] = datetime.datetime(year = 1999, month = 1, day = 1, hour = 0, minute = 0, second = 0)
 
     print(globals.email_address)
     print(globals.password)

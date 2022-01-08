@@ -69,7 +69,7 @@ def scrape(email_address, password, frequency, last_query, keywords):
         messages = int(messages[0])
 
         break_flag = False
-        result = ["The following emails are from" + email_address + "'s inbox."]
+        result = ["The following emails are from " + email_address + "'s inbox."]
         result.append("="*25)
         while(break_flag != True):
             # Fetch the email message matching the message ID
@@ -154,5 +154,6 @@ print(scrape("whatever12093@gmail.com", "A12345678!", 6, datetime.now() - timede
 # whatever93201@mail.com
 # A!@345678!
 
+## not working
 #noreplytest2468@gmail.com
 #A12345678!

@@ -15,7 +15,7 @@ def select_email(update, context):
         chat_id=chat_id,
         message_id=message_id,
         text=text,
-        reply_markup=keyboards.email_keyboard()
+        reply_markup=keyboards.email_keyboard(chat_id)
     )
 
     return 1
@@ -23,8 +23,10 @@ def select_email(update, context):
 def prompt_password(update, context):
     query = update.callback_query
     index = int(query.data[5:])
-    email_address = globals.email_address ## change to globals.email_address[index]
+    chat_id = query.message.chat_id
+    email_address = globals.email_address[chat_id][index] ## change to globals.email_address[index]
     context.user_data["email_address"] = email_address
+    context.user_data["index"] = index
     chat_id = query.message.chat_id
     message_id = query.message.message_id
 
@@ -42,6 +44,7 @@ def confirm_password(update, context):
     user_input = update.message.text
 
     email_address = context.user_data["email_address"]
+    index = context.user_data["index"]
 
     if not (backend.authenticate(email_address, user_input)):
         update.message.reply_text(
@@ -49,7 +52,7 @@ def confirm_password(update, context):
         )
         return 2
 
-    globals.password = user_input
+    globals.password[chat_id][index] = user_input
 
     text = "Your password " + user_input + " has been updated."
 

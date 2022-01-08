@@ -47,12 +47,13 @@ def main():
         states={
             1: [MessageHandler(Filters.text, keywords.add_keyword)],
         },
-        fallbacks=[CallbackQueryHandler(
-            show_home, pattern="main_options"), CallbackQueryHandler(keywords.delete_keyword, pattern="word")],
+        fallbacks=[CallbackQueryHandler(show_home, pattern="main_options"), CallbackQueryHandler(keywords.delete_keyword, pattern="word")],
         per_user=False
     ))
 
     dp.add_handler(CallbackQueryHandler(frequency.prompt_message_setting, pattern='message_setting'))
+    dp.add_handler(CallbackQueryHandler(show_home, pattern="go_back_home"))
+    
     
     dp.add_handler(ConversationHandler(
         entry_points = [CallbackQueryHandler(frequency.prompt_frequency, pattern='frequency')],
@@ -62,7 +63,7 @@ def main():
         },
 
         fallbacks=[CallbackQueryHandler(
-            frequency.prompt_message_setting, pattern="message_settings")],
+            frequency.prompt_message_setting, pattern="back_message_settings")],
         per_user=False
         
     
@@ -75,13 +76,12 @@ def main():
                 1: [CallbackQueryHandler(automatemessage.select_automate, pattern="on_off")],
             },
             fallbacks=[CallbackQueryHandler(
-            frequency.prompt_message_setting, pattern="message_settings")],
+            frequency.prompt_message_setting, pattern="back_message_settings")],
             per_user=False
         )
     )
 
     dp.add_handler(CallbackQueryHandler(checkmessages.send_message, pattern="check_messages"))
-    dp.add_handler(CallbackQueryHandler(show_home, pattern="main_options"))
 
     dp.add_handler(
         ConversationHandler(
@@ -90,7 +90,7 @@ def main():
                 1: [CallbackQueryHandler(changepassword.prompt_password, pattern="email")],
                 2: [MessageHandler(Filters.text, changepassword.confirm_password)],
             },
-            fallbacks=[CallbackQueryHandler(
+            fallbacks=[CallbackQueryHandler(show_home, pattern="main_options"), CallbackQueryHandler(
             frequency.prompt_message_setting, pattern="message_settings")],
             per_user=False
         )
@@ -103,7 +103,7 @@ def main():
                 1: [MessageHandler(Filters.text, initialization.get_email)],
                 2: [MessageHandler(Filters.text, initialization.get_password)],
             },
-            fallbacks=[CallbackQueryHandler(initialization.delete_email, pattern="email")],
+            fallbacks=[CallbackQueryHandler(show_home, pattern="main_options"), CallbackQueryHandler(initialization.delete_email, pattern="email")],
             per_user=False
         )
     )

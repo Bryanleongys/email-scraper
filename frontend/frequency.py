@@ -27,7 +27,7 @@ def select_frequency(update, context):
     message_id = query.message.message_id
     query = update.callback_query
     interval = int(query.data[8:])
-    globals.frequency = interval
+    globals.frequency[chat_id] = interval
 
     text = f'Messages will be sent every {interval} hours'
 

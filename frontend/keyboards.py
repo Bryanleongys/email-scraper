@@ -32,14 +32,14 @@ def frequency_keyboard():
     keyboard = []
     keyboard.append([InlineKeyboardButton("12h", callback_data="interval12")])
     keyboard.append([InlineKeyboardButton("24h", callback_data="interval24")])
-    keyboard.append([InlineKeyboardButton("Back", callback_data="message_settings")])
+    keyboard.append([InlineKeyboardButton("Back", callback_data="back_message_settings")])
     return InlineKeyboardMarkup(keyboard)
 
 def message_settings_keyboard():
     keyboard = []
     keyboard.append([InlineKeyboardButton("Frequency", callback_data="frequency")])
     keyboard.append([InlineKeyboardButton("On/Off Automated Messaging", callback_data="automate_messaging")])
-    keyboard.append([InlineKeyboardButton("Back", callback_data="main_options")])
+    keyboard.append([InlineKeyboardButton("Back", callback_data="go_back_home")])
     return InlineKeyboardMarkup(keyboard)
 
 def automate_keyboard():
@@ -49,12 +49,15 @@ def automate_keyboard():
     else:
         keyboard.append([InlineKeyboardButton("On", callback_data="on_off")])
 
-    keyboard.append([InlineKeyboardButton("Back", callback_data="message_settings")])
+    keyboard.append([InlineKeyboardButton("Back", callback_data="back_message_settings")])
     return InlineKeyboardMarkup(keyboard)
 
-def email_keyboard():
+def email_keyboard(chat_id):
     keyboard = []
-    email_addresses = globals.email_address
+    if chat_id in globals.email_address:
+        email_addresses = globals.email_address[chat_id]
+    else:
+        email_addresses = []
     counter = 0
     for email_address in email_addresses:
         keyboard.append([InlineKeyboardButton(email_address, callback_data=("email"+str(counter)))])
